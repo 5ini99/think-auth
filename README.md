@@ -20,6 +20,7 @@ The ThinkPHP5 Auth Package
 
 ### 导入数据表
 > `think_` 为自定义的数据表前缀
+
 ```
 ------------------------------
 -- think_auth_rule，规则表，
@@ -65,9 +66,9 @@ CREATE TABLE `think_auth_group_access` (
 Auth权限认证是按规则进行认证。
 在数据库中我们有 
 
-- **规则表（think_auth_rule） **
-- **用户组表(think_auth_group) **
-- **用户组明显表（think_auth_group_access）**
+- 规则表（think_auth_rule） 
+- 用户组表(think_auth_group) 
+- 用户组明显表（think_auth_group_access）
 
 我们在规则表中定义权限规则， 在用户组表中定义每个用户组有哪些权限规则，在用户组明显表中定义用户所属的用户组。 
 
