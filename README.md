@@ -136,15 +136,15 @@ Auth类还可以按用户属性进行判断权限， 比如
 如果定义了 condition字段，用户组中有规则不一定能通过认证，程序还会判断是否满足附加条件。
 比如我们添加几条规则： 
 
-> `name`字段：grade1 `condition`字段：{score}<100 
-> `name`字段：grade2 `condition`字段：{score}>100 and {score}<200
+> `name`字段：grade1 `condition`字段：{score}<100 <br/>
+> `name`字段：grade2 `condition`字段：{score}>100 and {score}<200<br/>
 > `name`字段：grade3 `condition`字段：{score}>200 and {score}<300
 
 这里 `{score}` 表示 `think_members` 表 中字段 `score` 的值。 
 
 那么这时候 
 
-> $auth->check('grade1', uid) 是判断用户积分是不是0-100
-> $auth->check('grade2', uid) 判断用户积分是不是在100-200
+> $auth->check('grade1', uid) 是判断用户积分是不是0-100<br/>
+> $auth->check('grade2', uid) 判断用户积分是不是在100-200<br/>
 > $auth->check('grade3', uid) 判断用户积分是不是在200-300
 
