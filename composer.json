@@ -19,9 +19,6 @@
     "autoload": {
         "psr-4": {
             "think\\auth\\": "src/"
-        },
-        "files": [
-            "src/helper.php"
-        ]
+        }
     }
 }
