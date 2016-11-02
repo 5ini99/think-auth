@@ -3,7 +3,8 @@
     "description": "auth package for thinkphp5",
     "homepage": "https://github.com/5ini99/think-auth",
     "license": "Apache-2.0",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
+    "version": "1.0.0",
     "authors": [
         {
             "name": "xiaobo.sun",

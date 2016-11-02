@@ -14,6 +14,7 @@ use think\Db;
 use think\Config;
 use think\Session;
 use think\Request;
+use think\Loader;
 
 /**
  * 权限认证类
@@ -189,10 +190,14 @@ class Auth
         if (isset($groups[$uid])) {
             return $groups[$uid];
         }
-        $user_groups = Db::name($this->config['auth_group_access'] . ' a')
-            ->where("a.uid='$uid' and g.status='1'")
-            ->join($this->config['auth_group'] . ' g', 'a.group_id=g.id', 'left')
-            ->field('uid,group_id,title,rules')->select();
+        // 转换表名
+        $auth_group_access = Loader::parseName($this->config['auth_group_access'], 1);
+        $auth_group = Loader::parseName($this->config['auth_group'], 1);
+        // 执行查询
+        $user_groups = Db::view($auth_group_access, 'uid,group_id')
+            ->view($auth_group, 'title,rules', "{$auth_group_access}.group_id={$auth_group}.id", 'LEFT')
+            ->where("{$auth_group_access}.uid='{$uid}' and {$auth_group}.status='1'")
+            ->select();
         $groups[$uid] = $user_groups ?: [];
 
         return $groups[$uid];
@@ -263,15 +268,13 @@ class Auth
      */
     protected function getUserInfo($uid)
     {
-        static $userinfo = [], $user;
+        static $userinfo = [];
 
-        if (is_null($user)) {
-            $user = Db::name($this->config['auth_user']);
-        }
+        $user = Db::name($this->config['auth_user']);
         // 获取用户表主键
-        $pk = is_string($user->getPk()) ? $user->getPk() : 'uid';
+        $_pk = is_string($user->getPk()) ? $user->getPk() : 'uid';
         if (!isset($userinfo[$uid])) {
-            $userinfo[$uid] = $user->where($pk, $uid)->find();
+            $userinfo[$uid] = $user->where($_pk, $uid)->find();
         }
 
         return $userinfo[$uid];
