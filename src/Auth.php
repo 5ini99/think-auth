@@ -104,6 +104,7 @@ class Auth
         if ($auth = Config::get('auth')) {
             $this->config = array_merge($this->config, $auth);
         }
+
         // 初始化request
         $this->request = Request::instance();
     }
@@ -126,12 +127,12 @@ class Auth
      * 检查权限
      * @param $name string|array  需要验证的规则列表,支持逗号分隔的权限规则或索引数组
      * @param $uid  int           认证用户的id
+     * @param string $relation 如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
      * @param int $type 认证类型
      * @param string $mode 执行check的模式
-     * @param string $relation 如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
      * @return bool               通过验证返回true;失败返回false
      */
-    public function check($name, $uid, $type = 1, $mode = 'url', $relation = 'or')
+    public function check($name, $uid, $relation = 'or', $type = 1, $mode = 'url')
     {
         if (!$this->config['auth_on']) {
             return true;
@@ -191,8 +192,9 @@ class Auth
             return $groups[$uid];
         }
         // 转换表名
-        $auth_group_access = Loader::parseName($this->config['auth_group_access'], 1);
-        $auth_group = Loader::parseName($this->config['auth_group'], 1);
+        $type = Config::get('database.prefix') ? 1 : 0;
+        $auth_group_access = Loader::parseName($this->config['auth_group_access'], $type);
+        $auth_group = Loader::parseName($this->config['auth_group'], $type);
         // 执行查询
         $user_groups = Db::view($auth_group_access, 'uid,group_id')
             ->view($auth_group, 'title,rules', "{$auth_group_access}.group_id={$auth_group}.id", 'LEFT')
