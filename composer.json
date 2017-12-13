@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "think\\auth\\": "src/"
+            "think\\": "src/"
         }
     }
 }
